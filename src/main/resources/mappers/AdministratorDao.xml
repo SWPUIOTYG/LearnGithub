@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 -->
+<mapper namespace="com.yg.mybatisinformation.dao.AdministratorDao"> <!--namespace用于绑定Dao接口  面向接口编程-->
+    <!-- statement，内容：sql语句。id：唯一标识，随便写，在同一个命名空间下保持唯一
+       resultType：sql语句查询结果集的封装类型,tb_user即为数据库中的表
+     -->
+
+<!--useGeneratedKeys 如果insert成功就返回一个主键的值  就是keyProperty里的属性  keyColumn是主键字段名-->
+    <insert id="InsertAdInformation" useGeneratedKeys="true" keyColumn="id" keyProperty="id"  parameterType="Administrator">
+        insert into administrator(
+        id,
+        name,
+        age,
+        sex,
+        loginnum,
+        password,
+        logintime,
+        updatetime
+        )
+        values
+        (
+            null,
+            #{name},
+            #{age},
+            #{sex},
+            #{loginnum},
+            #{password},
+            NOW(),
+            NOW()
+        );
+    </insert>
+
+    <update id="updateAdInformation" parameterType="Administrator">
+        update administrator
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name!=null" >name=#{name},</if>
+            <if test="age!=null">age=#{age},</if>
+            <if test="sex!=null">sex=#{sex},</if>
+            <if test="loginnum">loginnum=#{loginnum},</if>
+            <if test="password">password=#{password},</if>
+            updatetime=now(),
+        </trim>
+        where
+        (id=#{id});
+    </update>
+
+
+    <delete id="deleteAdInformationById" parameterType="java.lang.Integer">
+        delete  from administrator where id=#{id}
+    </delete>
+
+    <select id="selectAdInformationById" resultType="Administrator"  parameterType="java.lang.Integer">
+        select
+        administrator.id as id,
+        administrator.name as name,
+        administrator.sex as sex,
+        administrator.age as age,
+        administrator.loginnum as loginnum,
+        administrator.password as password,
+        administrator.logintime as logintime,
+        administrator.updatetime as updatetime
+        from
+        administrator
+        ORDER BY id
+        DESC
+        where administrator.id=#{id};
+    </select>
+
+    <select id="selectAdAll" resultType="Administrator">
+        select * from administrator;
+    </select>
+
+    <insert id="InsertUserInfo" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="User">
+        insert into userinformation(
+        id,
+        name,
+        age,
+        sex,
+        loginnum,
+        password,
+        logintime,
+        updatetime
+        )
+        values (
+            null,
+            #{name},
+            #{age},
+            #{sex},
+            #{loginnum},
+            #{password},
+            NOW(),
+            NOW()
+        );
+    </insert>
+
+    <delete id="deleteUserInfoById" parameterType="java.lang.Integer" >
+        delete  from userinformation where id=#{id}
+    </delete>
+    <update id="updateUserInfo" parameterType="User">
+        update userinformation
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name!=null" >name=#{name},</if>
+            <if test="age!=null">age=#{age},</if>
+            <if test="sex!=null">sex=#{sex},</if>
+            <if test="loginnum"> loginnum=#{loginnum},</if>
+            <if test="password">password=#{password},</if>
+            updatetime=now(),
+        </trim>
+        where
+        (id=#{id});
+    </update>
+    <select id="selectUserInfoById" resultType="User" parameterType="java.lang.Integer">
+        select
+            userinformation.id as id,
+            userinformation.name as name,
+            userinformation.sex as sex,
+            userinformation.age as age,
+            userinformation.loginnum as loginnum,
+            userinformation.password as password,
+            userinformation.updatetime as updatetime,
+            userinformation.logintime as logintime
+            from
+            userinformation
+            ORDER BY id
+            DESC
+            where userinformation.id = #{id};
+
+   </select>
+    <select id="selectUserAll" resultType="User">
+        select * from userinformation
+        order by userinformation.id
+        DESC ;
+    </select>
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 -->
+<mapper namespace="com.yg.mybatisinformation.dao.UserDao">
+    <!-- statement，内容：sql语句。id：唯一标识，随便写，在同一个命名空间下保持唯一
+       resultType：sql语句查询结果集的封装类型,tb_user即为数据库中的表
+     -->
+    <!--<select id="queryUserById" resultType="com.zpc.mybatis.pojo.User">-->
+    <!--select * from tb_user where id = #{id}-->
+    <!--</select>-->
+
+    <!--使用别名,是数据库表中的字段名称和dao里的属性相匹配-->
+   <select id="selectUserById" resultType="User">
+        select
+            userinformation.id as id,
+            userinformation.name as name,
+            userinformation.sex as sex,
+            userinformation.age as age,
+            userinformation.loginnum as loginnum,
+            userinformation.password as password,
+            userinformation.updatetime as updatetime,
+            userinformation.logintime as logintime
+            from
+            userinformation
+            where userinformation.id = #{id};
+
+   </select>
+    <update id="updateUserInformation" parameterType="User">
+        update userinformation
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name!=null" >name=#{name},</if>
+            <if test="age!=null">age=#{age},</if>
+            <if test="sex!=null">sex=#{sex},</if>
+            <if test="loginnum"> loginnum=#{loginnum},</if>
+            <if test="password">password=#{password},</if>
+            updatetime=now(),
+        </trim>
+        where
+        (id=#{id});
+    </update>
+</mapper>
